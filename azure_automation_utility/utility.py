@@ -29,6 +29,7 @@ def get_automation_runas_credential():
             pem_pkey,
             thumbprint)
     )
+
 # Return token based on Azure automation Runas connection
 def get_automation_runas_token():
     """ Returs a token that can be used to authenticate against Azure resources """
@@ -94,3 +95,21 @@ def import_child_runbook(resource_group, automation_account, runbook_name):
     import importlib
     return importlib.import_module(runbook_name)
     
+def load_webhook_body():
+    """ Parses the arguments sent in from a webhook and returns the request body as a python object """
+    import sys
+    import json
+
+    # Read all the arguments sent in by the webhook
+    payload = ""
+    for index in range(len(sys.argv)):
+        payload += str(sys.argv[index]).strip()
+
+    # Get the RequestBody so we can process it
+    start = payload.find("RequestBody:")
+    end = payload.find("RequestHeader:")
+    requestBody = payload[start+12:end-1]
+
+    # return webhook request body as Python dictionary
+    return json.loads(str(requestBody))
+

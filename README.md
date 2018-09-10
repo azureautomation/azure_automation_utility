@@ -1,13 +1,17 @@
 # Azure Automation utility package
+
 Contains a python package to make it easier to author Python within Azure Automation.
-It contains three functions:
+It contains the following functions:
 
 * get_automation_runas_credential()
 * get_automation_runas_token()
 * import_child_runbook(resource_group, automation_account, runbook_name)
+* load_webhook_body()
 
 ## Build instructions
+
 You can create a wheel file by following the below steps
+
 * Download or clone this repository.
 * Run the below commands to create the package and install using pip.
 
@@ -16,10 +20,10 @@ python setup.py sdist bdist_wheel
 pip install .
 ```
 
-
 ## Example usage
 
 ### List resource groups
+
 ```python
 import azure.mgmt.resource
 import automationassets
@@ -39,10 +43,10 @@ groups = resource_client.resource_groups.list()
 for group in groups:
     print group.name
 ```
+
 ### Call a function in a child runbook
+
 ```python
-import azure.mgmt.resource
-import automationassets
 from azure_automation_utility import import_child_runbook
 
 # Import child runbook and call some function
@@ -56,3 +60,13 @@ child_runbook = import_child_runbook("ContosoGroup", "ContosoAccount", "hello_wo
 """
 
 child_runbook.hello("world")
+```
+
+### Get webhook request body
+
+```python
+from azure_automation_utility import load_webhook_body
+
+requestBody = load_webhook_body()
+print requestBody
+```
