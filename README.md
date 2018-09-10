@@ -54,8 +54,8 @@ child_runbook = import_child_runbook("ContosoGroup", "ContosoAccount", "hello_wo
 
 # hello_world runbook that is published in the Automation account
 """
-# #!/usr/bin/env python2
-# def hello(name):
+#!/usr/bin/env python2
+def hello(name):
     print ("Hello " + name)
 """
 
