@@ -70,3 +70,36 @@ from azure_automation_utility import load_webhook_body
 requestBody = load_webhook_body()
 print requestBody
 ```
+
+### Get list of runbooks using REST call against Azure
+
+```python
+import requests
+import automationassets
+from azure_automation_utility import get_automation_runas_token
+
+# Authenticate to Azure using the Azure Automation RunAs service principal
+access_token = get_automation_runas_token()
+
+# Get subscription from RunAs connection
+automation_runas_connection = automationassets.get_automation_connection("AzureRunAsConnection")
+subscription_id = str(automation_runas_connection["SubscriptionId"])
+
+# Automation resource group and account to get list of runbooks
+_AUTOMATION_RESOURCE_GROUP = "ContosoGroup"
+_AUTOMATION_ACCOUNT = "ContosoAccount"
+
+# Set up URI to list runbooks
+uri = ("https://management.azure.com/subscriptions/" + subscription_id
+       + "/resourceGroups/" + _AUTOMATION_RESOURCE_GROUP
+       + "/providers/Microsoft.Automation/automationAccounts/" + _AUTOMATION_ACCOUNT
+       + "/runbooks?api-version=2015-10-31")
+
+# Get list of runbooks in the Automation account
+headers = {"Authorization": 'Bearer ' + access_token}
+json_output = requests.get(uri, headers=headers).json()
+
+for runbook in json_output['value']:
+    print runbook['name']
+```
+
